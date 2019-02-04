@@ -4,14 +4,19 @@ RUN curl --silent --output /tmp/sdk.zip https://dl.google.com/android/repository
 RUN mkdir -p /opt/android-sdk/
 RUN unzip /tmp/sdk.zip -d /opt/android-sdk/
 
-FROM alpine:latest
+FROM debian:stable-slim
 LABEL maintainer="Andreas Freimuth <andreas.freimuth@united-bits.de>"
 
-ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk/
+ARG DEBIAN_FRONTEND=noninteractive
+
+ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 ENV ANDROID_HOME=/opt/android-sdk
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/android-sdk/tools/bin
 
-RUN apk add --no-cache nodejs npm openjdk8 gradle
+RUN apt-get update && apt-get install --yes curl gnupg && apt-get clean
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN mkdir -p /usr/share/man/man1
+RUN apt-get install --yes nodejs openjdk-8-jdk-headless gradle
 
 RUN npm install -g cordova
 

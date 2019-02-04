@@ -1,0 +1,8 @@
+version: !!str 2
+services:
+  cordova:
+    build: .
+    volumes:
+    - ./:/app
+    - /dev/bus/usb:/dev/bus/usb
+    privileged: true
